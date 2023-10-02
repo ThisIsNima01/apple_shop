@@ -29,45 +29,38 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_snack_bar: ^0.3.1
+  awesome_ripple_animation: ^1.0.1
+  bloc: ^8.1.2
+  cached_network_image: ^3.2.3
+  carousel_slider: ^4.2.1
+  confetti: ^0.7.0
+  cupertino_icons: ^1.0.2
+  dartz: ^0.10.1
+  davinci: ^2.1.1
+  dio: ^5.1.1
+  dotted_line: ^3.1.0
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  flutter_screenutil: ^5.7.0
-  smooth_page_indicator: ^1.0.1
-  dotted_line: ^3.1.0
-  dartz: ^0.10.1
-  get_it: ^7.2.0
-  dio: ^5.1.1
-  shared_preferences: ^2.1.0
   flutter_bloc: ^8.1.2
-  bloc: ^8.1.1
-  cached_network_image: ^3.2.3
-  skeletons: ^0.0.3
-  davinci: ^2.1.1
-  loading_animation_widget: ^1.2.0+4
+  flutter_screenutil: ^5.7.0
   flutter_svg: ^2.0.5
-  hive_flutter: ^1.1.0
+  get_it: ^7.2.0
   hive: ^2.2.3
-  animated_snack_bar: ^0.3.1
+  hive_flutter: ^1.1.0
   intl: ^0.18.1
-  carousel_slider: ^4.2.1
-  awesome_ripple_animation: ^1.0.1
+  loading_animation_widget: ^1.2.0+4
+  loading_indicator: ^3.1.1
+  shamsi_date: ^1.0.1
+  shared_preferences: ^2.1.0
+  skeletons: ^0.0.3
+  smooth_page_indicator: ^1.0.1
+  uni_links: ^0.5.1
   url_launcher: ^6.1.11
   zarinpal: ^1.0.5
-  uni_links: ^0.5.1
-  shamsi_date: ^1.0.1
-  confetti: ^0.7.0
-  loading_indicator: ^3.1.1
-
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   build_runner: ^2.2.0
-  hive_generator: ^2.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -75,10 +68,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter packages.
 flutter:
   # The following line ensures that the Material Icons font is
@@ -95,10 +90,8 @@ flutter:
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -139,6 +132,5 @@ flutter:
       fonts:
         - asset: assets/fonts/ShabnamBold.ttf
           weight: 700
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -50,12 +50,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               widget.product.id, widget.product.categoryId));
           return bloc;
         },
-        child: DetailContent(parentWidget: widget));
+        child: DetailScreenContent(parentWidget: widget));
   }
 }
 
-class DetailContent extends StatelessWidget {
-  const DetailContent({
+class DetailScreenContent extends StatelessWidget {
+  const DetailScreenContent({
     super.key,
     required this.parentWidget,
   });
@@ -69,68 +69,67 @@ class DetailContent extends StatelessWidget {
       backgroundColor: CustomColors.backgroundScreenColor,
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
+          if (state is ProductDetailLoadingState) {
+            return const Center(
+              child: LoadingItems(),
+            );
+          }
           return SafeArea(
             child: CustomScrollView(
               slivers: [
-                if (state is ProductDetailLoadingState) ...{
-                  // SliverFillRemaining(
-                  //   child: LoadingItems(title: 'درحال دریافت اطلاعات محصول'),
-                  // ),
-                } else ...{
-                  if (state is ProductDetailResponseState) ...{
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 44.w,
-                          right: 44.w,
-                          bottom: 32.h,
-                          top: 12.h,
+                if (state is ProductDetailResponseState) ...{
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 44.w,
+                        right: 44.w,
+                        bottom: 32.h,
+                        top: 12.h,
+                      ),
+                      child: Container(
+                        height: 46.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.r),
                         ),
-                        child: Container(
-                          height: 46.h,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 16.w,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                            SvgPicture.asset('assets/icons/apple.svg',
+                                color: CustomColors.blue, width: 24.w),
+                            Expanded(
+                                child: state.productCategory.fold(
+                              (exceptionMessage) => Text(
+                                'اطلاعات محصول',
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.bodyLarge!
+                                    .copyWith(color: theme.colorScheme.primary),
                               ),
-                              SvgPicture.asset('assets/icons/apple.svg',
-                                  color: CustomColors.blue, width: 24.w),
-                              Expanded(
-                                  child: state.productCategory.fold(
-                                (exceptionMessage) => Text(
-                                  'اطلاعات محصول',
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyLarge!.copyWith(
-                                      color: theme.colorScheme.primary),
-                                ),
-                                (productCategory) => Text(
-                                  productCategory.title!,
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyLarge!.copyWith(
-                                      color: theme.colorScheme.primary),
-                                ),
-                              )),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: SvgPicture.asset(
-                                  'assets/icons/arrow-right.svg',
-                                ),
+                              (productCategory) => Text(
+                                productCategory.title!,
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.bodyLarge!
+                                    .copyWith(color: theme.colorScheme.primary),
                               ),
-                              SizedBox(
-                                width: 16.w,
+                            )),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/arrow-right.svg',
                               ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  },
+                    ),
+                  ),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 20.h),
@@ -142,33 +141,27 @@ class DetailContent extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (state is ProductDetailResponseState) ...{
-                    state.productImages.fold((l) {
-                      return const SliverToBoxAdapter(
-                        child: Text('خطا'),
-                      );
-                    }, (productImageList) {
-                      return GalleryWidget(
-                          productImageList, parentWidget.product.thumbnail);
-                    })
+                  state.productImages.fold((l) {
+                    return const SliverToBoxAdapter(
+                      child: Text('خطا'),
+                    );
+                  }, (productImageList) {
+                    return GalleryWidget(
+                        productImageList, parentWidget.product.thumbnail);
+                  }),
+                  state.productVariants.fold((l) {
+                    return const SliverToBoxAdapter(
+                      child: Text('خطا'),
+                    );
+                  }, (productVariantList) {
+                    return VariantContainerGenerator(
+                        productVariantList, parentWidget.basketItemVariantList);
+                  }),
+                  state.productProperties.fold((l) {
+                    return const ProductProperties([]);
                   },
-                  if (state is ProductDetailResponseState) ...{
-                    state.productVariants.fold((l) {
-                      return const SliverToBoxAdapter(
-                        child: Text('خطا'),
-                      );
-                    }, (productVariantList) {
-                      return VariantContainerGenerator(productVariantList,
-                          parentWidget.basketItemVariantList);
-                    })
-                  },
-                  if (state is ProductDetailResponseState) ...{
-                    state.productProperties.fold((l) {
-                      return const ProductProperties([]);
-                    },
-                        (productPropertyList) =>
-                            ProductProperties(productPropertyList))
-                  },
+                          (productPropertyList) =>
+                          ProductProperties(productPropertyList)),
                   ProductDescription(parentWidget.product.description),
                   SliverPadding(
                     padding: EdgeInsets.only(top: 20.h, bottom: 40.h),
@@ -178,8 +171,7 @@ class DetailContent extends StatelessWidget {
                         height: 46.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border:
-                              Border.all(color: CustomColors.grey, width: 1),
+                          border: Border.all(color: CustomColors.grey, width: 1),
                           borderRadius: BorderRadius.circular(16.r),
                         ),
                         child: Padding(
@@ -207,7 +199,7 @@ class DetailContent extends StatelessWidget {
                                         width: 26.w,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          BorderRadius.circular(8.r),
                                         ),
                                         child: Image.asset(
                                             'assets/images/comments/0.png'),
@@ -220,7 +212,7 @@ class DetailContent extends StatelessWidget {
                                         width: 26.w,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          BorderRadius.circular(8.r),
                                         ),
                                         child: Image.asset(
                                             'assets/images/comments/1.png'),
@@ -233,7 +225,7 @@ class DetailContent extends StatelessWidget {
                                         width: 26.w,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          BorderRadius.circular(8.r),
                                         ),
                                         child: Image.asset(
                                             'assets/images/comments/2.png'),
@@ -246,7 +238,7 @@ class DetailContent extends StatelessWidget {
                                         width: 26.w,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          BorderRadius.circular(8.r),
                                         ),
                                         child: Image.asset(
                                             'assets/images/comments/3.png'),
@@ -259,7 +251,7 @@ class DetailContent extends StatelessWidget {
                                         width: 26.w,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          BorderRadius.circular(8.r),
                                           color: Colors.grey,
                                         ),
                                         child: Center(
@@ -300,8 +292,8 @@ class DetailContent extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
-                }
+                  ),
+                },
               ],
             ),
           );
