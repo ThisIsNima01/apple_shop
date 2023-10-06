@@ -15,12 +15,12 @@ class AuthenticationRemote implements IAuthenticationDataSource {
   Future<void> register(
       String username, String password, String passwordConfirm) async {
     try {
-      final response = await _dio.post('collections/users/records', data: {
+      await _dio.post('collections/users/records', data: {
         'username': username,
         'password': password,
         'passwordConfirm': passwordConfirm
       });
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw ApiException(e.response?.data['message'], e.response?.statusCode);
     } catch (e) {
       throw ApiException('unknown error', 0);

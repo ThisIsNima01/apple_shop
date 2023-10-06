@@ -8,7 +8,8 @@ class ProfileItemChip extends StatelessWidget {
   final String title;
   final int index;
 
-  const ProfileItemChip({Key? key, required this.title,required this.index}) : super(key: key);
+  const ProfileItemChip({Key? key, required this.title, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,10 @@ class ProfileItemChip extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () async{
+          onTap: () async {
             if (index == 10) {
-
-            await launchUrl(Uri.parse('https://github.com/NimaNaderi'),mode: LaunchMode.externalApplication);
+              await launchUrl(Uri.parse('https://github.com/NimaNaderi'),
+                  mode: LaunchMode.externalApplication);
             }
           },
           child: Container(
@@ -32,19 +33,22 @@ class ProfileItemChip extends StatelessWidget {
                 borderRadius: BorderRadius.circular(40.r),
               ),
             ),
-            child: index == 10 ? RippleAnimation(
-              repeat: true,
-              color: Colors.black,
-              minRadius: 20,
-              ripplesCount: 8,
-              child: SvgPicture.asset(
-                'assets/images/profile/$index.svg',
-                color: theme.colorScheme.onPrimary,
-              ),
-            ) : SvgPicture.asset(
-              'assets/images/profile/$index.svg',
-              color: theme.colorScheme.onPrimary,
-            ),
+            child: index == 10
+                ? RippleAnimation(
+                    size: Size(10, 10),
+                    repeat: true,
+                    color: Colors.black,
+                    minRadius: 20,
+                    ripplesCount: 8,
+                    child: SvgPicture.asset(
+                      'assets/images/profile/$index.svg',
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  )
+                : SvgPicture.asset(
+                    'assets/images/profile/$index.svg',
+                    color: theme.colorScheme.onPrimary,
+                  ),
           ),
         ),
         SizedBox(

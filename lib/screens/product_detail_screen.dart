@@ -3,13 +3,16 @@ import 'dart:ui';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:apple_shop/bloc/basket/basket_bloc.dart';
 import 'package:apple_shop/bloc/basket/basket_event.dart';
+import 'package:apple_shop/bloc/comment/bloc/comment_bloc.dart';
 import 'package:apple_shop/bloc/product/product_bloc.dart';
 import 'package:apple_shop/bloc/product/product_event.dart';
 import 'package:apple_shop/bloc/product/product_state.dart';
+import 'package:apple_shop/config/theme/app_colors.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:apple_shop/data/model/property.dart';
+import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:apple_shop/widgets/loading.dart';
@@ -160,121 +163,145 @@ class DetailScreenContent extends StatelessWidget {
                   state.productProperties.fold((l) {
                     return const ProductProperties([]);
                   },
-                          (productPropertyList) =>
+                      (productPropertyList) =>
                           ProductProperties(productPropertyList)),
                   ProductDescription(parentWidget.product.description),
                   SliverPadding(
                     padding: EdgeInsets.only(top: 20.h, bottom: 40.h),
                     sliver: SliverToBoxAdapter(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 44.w),
-                        height: 46.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: CustomColors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/icons/arrow-left.svg'),
-                              SizedBox(
-                                width: 10.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            isDismissible: true,
+                            useSafeArea: true,
+                            showDragHandle: true,
+                            builder: (context) => BlocProvider(
+                              lazy: false,
+                              create: (context) {
+                                final commentBloc = CommentBloc(locator.get());
+                                commentBloc.add(CommentInitialEvent(
+                                    parentWidget.product.id));
+                                return commentBloc;
+                              },
+                              child: CommentBottomSheet(
+                                productId: parentWidget.product.id,
                               ),
-                              Text(
-                                'مشاهده',
-                                style: theme.textTheme.bodySmall!
-                                    .copyWith(color: theme.colorScheme.primary),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    Positioned(
-                                      right: 0,
-                                      child: Container(
-                                        height: 26.h,
-                                        width: 26.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(8.r),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 44.w),
+                          height: 46.h,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border:
+                                Border.all(color: CustomColors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset('assets/icons/arrow-left.svg'),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Text(
+                                  'مشاهده',
+                                  style: theme.textTheme.bodySmall!.copyWith(
+                                      color: theme.colorScheme.primary),
+                                ),
+                                Expanded(
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Positioned(
+                                        right: 0,
+                                        child: Container(
+                                          height: 26.h,
+                                          width: 26.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          child: Image.asset(
+                                              'assets/images/comments/0.png'),
                                         ),
-                                        child: Image.asset(
-                                            'assets/images/comments/0.png'),
                                       ),
-                                    ),
-                                    Positioned(
-                                      right: 15.w,
-                                      child: Container(
-                                        height: 26.h,
-                                        width: 26.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(8.r),
+                                      Positioned(
+                                        right: 15.w,
+                                        child: Container(
+                                          height: 26.h,
+                                          width: 26.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          child: Image.asset(
+                                              'assets/images/comments/1.png'),
                                         ),
-                                        child: Image.asset(
-                                            'assets/images/comments/1.png'),
                                       ),
-                                    ),
-                                    Positioned(
-                                      right: 30.w,
-                                      child: Container(
-                                        height: 26.h,
-                                        width: 26.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(8.r),
+                                      Positioned(
+                                        right: 30.w,
+                                        child: Container(
+                                          height: 26.h,
+                                          width: 26.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          child: Image.asset(
+                                              'assets/images/comments/2.png'),
                                         ),
-                                        child: Image.asset(
-                                            'assets/images/comments/2.png'),
                                       ),
-                                    ),
-                                    Positioned(
-                                      right: 45.w,
-                                      child: Container(
-                                        height: 26.h,
-                                        width: 26.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(8.r),
+                                      Positioned(
+                                        right: 45.w,
+                                        child: Container(
+                                          height: 26.h,
+                                          width: 26.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          child: Image.asset(
+                                              'assets/images/comments/3.png'),
                                         ),
-                                        child: Image.asset(
-                                            'assets/images/comments/3.png'),
                                       ),
-                                    ),
-                                    Positioned(
-                                      right: 60.w,
-                                      child: Container(
-                                        height: 26.h,
-                                        width: 26.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(8.r),
-                                          color: Colors.grey,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '+10',
-                                            style: theme.textTheme.labelSmall,
+                                      Positioned(
+                                        right: 60.w,
+                                        child: Container(
+                                          height: 26.h,
+                                          width: 26.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                            color: Colors.grey,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '+10',
+                                              style: theme.textTheme.labelSmall,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Text(
-                                ':نظرات کاربران',
-                                style: theme.textTheme.bodyMedium!.copyWith(
-                                    color: theme.colorScheme.onSurface,
-                                    fontFamily: 'SM'),
-                              ),
-                            ],
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Text(
+                                  ':نظرات کاربران',
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                      color: theme.colorScheme.onSurface,
+                                      fontFamily: 'SM'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -299,6 +326,193 @@ class DetailScreenContent extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class CommentBottomSheet extends StatelessWidget {
+  final String productId;
+  final TextEditingController controller = TextEditingController();
+  CommentBottomSheet({super.key, required this.productId});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<CommentBloc, CommentState>(
+      builder: (context, state) {
+        if (state is CommentLoadingState) {
+          return const Center(
+            child: LoadingItems(),
+          );
+        }
+        return SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    if (state is CommentResponseState) ...{
+                      state.comments.fold(
+                          (l) => SliverToBoxAdapter(
+                                child: Text(l),
+                              ), (commentList) {
+                        if (commentList.isEmpty) {
+                          return const SliverToBoxAdapter(
+                            child: Center(
+                              child: Text('نظری برای این محصول ثبت نشده است'),
+                            ),
+                          );
+                        }
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            childCount: commentList.length,
+                            (context, index) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: AppColors.lightContainerColor,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 2,
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 16.w, vertical: 8.h),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          commentList[index].username.isNotEmpty
+                                              ? commentList[index].username
+                                              : 'کاربر',
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        Text(
+                                          commentList[index].text.isNotEmpty
+                                              ? commentList[index].text
+                                              : 'نظر بدون متن',
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 16.w,
+                                  ),
+                                  SizedBox(
+                                    width: 40.w,
+                                    height: 40.h,
+                                    child: commentList[index].avatar.isNotEmpty
+                                        ? CachedImage(
+                                            imageUrl: commentList[index]
+                                                .userAvatarUrl,
+                                          )
+                                        : Image.asset(
+                                            'assets/images/avatar.png'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      })
+                    }
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        labelText: 'نظر من...',
+                        labelStyle: TextStyle(
+                          fontFamily: 'SM',
+                          fontSize: 18.sp,
+                          color: Colors.black,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                          borderSide:
+                              const BorderSide(color: Colors.black, width: 3),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                          borderSide: const BorderSide(
+                              color: CustomColors.blue, width: 3),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            height: 62.h,
+                            decoration: BoxDecoration(
+                              color: CustomColors.blue,
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                          ),
+                          Positioned(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16.r),
+                              child: BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (controller.text.isEmpty) {
+                                      return;
+                                    }
+                                    context.read<CommentBloc>().add(
+                                        CommentPostEvent(
+                                            productId, controller.text));
+
+                                    controller.text = '';
+                                  },
+                                  child: Container(
+                                    height: 54.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(16.r),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'ثبت نظر',
+                                        style: theme.textTheme.bodyLarge!
+                                            .copyWith(
+                                                color: theme
+                                                    .colorScheme.onPrimary),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
