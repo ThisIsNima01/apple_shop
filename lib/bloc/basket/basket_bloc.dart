@@ -7,7 +7,6 @@ import 'package:apple_shop/utils/extensions/string_extensions.dart';
 import 'package:apple_shop/utils/utils.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:shamsi_date/shamsi_date.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zarinpal/zarinpal.dart';

@@ -1,4 +1,5 @@
 import 'package:apple_shop/bloc/basket/basket_bloc.dart';
+import 'package:apple_shop/bloc/comment/bloc/comment_bloc.dart';
 import 'package:apple_shop/data/model/product.dart';
 import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
@@ -23,12 +24,25 @@ class ProductItem extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BlocProvider<BasketBloc>.value(
-            value: locator.get<BasketBloc>(),
-            child: ProductDetailScreen(product),
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider<BasketBloc>.value(
+                  value: locator.get<BasketBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) {
+                    final commentBloc = CommentBloc(locator.get());
+                    commentBloc.add(CommentInitialEvent(product.id));
+                    return commentBloc;
+                  },
+                )
+              ],
+              child: ProductDetailScreen(product),
+            ),
           ),
-        ));
+        );
       },
       child: Container(
         height: 216.h,
@@ -149,7 +163,9 @@ class ProductItem extends StatelessWidget {
                               Text(
                                 (product.price + product.discountPrice)
                                     .separateByComma(),
-                                style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onPrimary,fontFamily: 'SM'),
+                                style: theme.textTheme.bodyLarge!.copyWith(
+                                    color: theme.colorScheme.onPrimary,
+                                    fontFamily: 'SM'),
                               ),
                             ],
                           ),
@@ -157,7 +173,8 @@ class ProductItem extends StatelessWidget {
                           SizedBox(
                             width: 24.w,
                             child: SvgPicture.asset(
-                                'assets/icons/arrow-right-filled.svg',height: 20.h),
+                                'assets/icons/arrow-right-filled.svg',
+                                height: 20.h),
                           )
                         ],
                       ),

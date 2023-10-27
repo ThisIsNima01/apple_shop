@@ -19,12 +19,12 @@ class CommentRemoteDataSource extends ICommentDataSource {
     };
 
     try {
-      Response<dynamic> banners = await _dio.get(
+      Response<dynamic> comments = await _dio.get(
         'collections/comment/records',
         queryParameters: queryParameters,
       );
 
-      return banners.data['items']
+      return comments.data['items']
           .map<Comment>((jsonObject) => Comment.fromJson(jsonObject))
           .toList();
     } on DioException catch (e) {
