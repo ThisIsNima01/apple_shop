@@ -18,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameTextController = TextEditingController();
-
   final _passwordTextController = TextEditingController();
 
   @override
@@ -87,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           color: Colors.grey[300],
                           child: TextField(
+                            textInputAction: TextInputAction.next,
                             controller: _usernameTextController,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
@@ -117,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             obscureText: true,
                             autocorrect: false,
                             enableSuggestions: false,
+                            textInputAction: TextInputAction.go,
                             controller: _passwordTextController,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
@@ -132,7 +133,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   BlocConsumer<AuthBloc, AuthState>(
                     listener: (context, state) {
                       if (state is AuthResponseState) {
-                        state.response.fold((l) => null, (r) {
+                        state.response.fold((l) {
+                          _usernameTextController.text = '';
+                          _passwordTextController.text = '';
+                          final snackbar = SnackBar(
+                            content: Text(
+                              l,
+                              style: TextStyle(
+                                fontFamily: 'SB',
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                            duration: const Duration(milliseconds: 1500),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        }, (r) {
                           globalNavigatorKey.currentState?.pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const BaseScreen(),
@@ -167,10 +184,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
 
                       if (state is AuthResponseState) {
-                        Text widget = const Text('');
+                        Widget widget = const Text('');
 
                         state.response.fold((l) {
-                          widget = Text(l);
+                          widget = ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              textStyle:
+                                  TextStyle(fontFamily: 'SB', fontSize: 20.sp),
+                              minimumSize: const Size(200, 50),
+                              backgroundColor: CustomColors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.r),
+                              ),
+                            ),
+                            onPressed: () {
+                              BlocProvider.of<AuthBloc>(context).add(
+                                  AuthLoginEvent(_usernameTextController.text,
+                                      _passwordTextController.text));
+                            },
+                            child: const Text('ورود به حساب کاربری'),
+                          );
                         }, (r) {
                           widget = Text(r);
                         });

@@ -29,6 +29,7 @@ class ProfileScreen extends StatelessWidget {
               child: const ProjectAppBar(appbarTitle: 'حساب کاربری'),
             ),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () {
                   AuthManager.logout();
                   Navigator.pushReplacement(
@@ -40,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
                 },
                 child: const Text('خروج')),
             Text(
-              'نیما نادری',
+              AuthManager.getUsername(),
               style: theme.textTheme.bodyLarge!
                   .copyWith(color: theme.colorScheme.onBackground),
             ),

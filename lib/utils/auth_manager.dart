@@ -19,6 +19,14 @@ class AuthManager {
     return _sharedPrefs.getString('user_id') ?? '';
   }
 
+  static void saveUsername(String username) {
+    _sharedPrefs.setString('username', username);
+  }
+
+  static String getUsername() {
+    return _sharedPrefs.getString('username') ?? 'کاربر';
+  }
+
   static String readAuth() {
     return _sharedPrefs.getString('access_token') ?? '';
   }

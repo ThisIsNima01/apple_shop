@@ -17,11 +17,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _usernameTextController = TextEditingController();
+  final _usernameTextController = TextEditingController(text: 'nimanaderi');
 
-  final _passwordTextController = TextEditingController();
+  final _passwordTextController = TextEditingController(text: 'nima8484');
 
-  final _passwordConfirmTextController = TextEditingController();
+  final _passwordConfirmTextController =
+      TextEditingController(text: 'nima8484');
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +164,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       BlocConsumer<AuthBloc, AuthState>(
                         listener: (context, state) {
                           if (state is AuthResponseState) {
-                            state.response.fold((l) => null, (r) {
+                            state.response.fold((l) {
+                              final snackbar = SnackBar(
+                                content: Text(
+                                  l,
+                                  style: TextStyle(
+                                    fontFamily: 'SB',
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                                backgroundColor: Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(milliseconds: 1500),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                            }, (r) {
                               globalNavigatorKey.currentState?.pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) => const BaseScreen(),
@@ -202,10 +218,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
 
                           if (state is AuthResponseState) {
-                            Text widget = const Text('');
+                            Widget widget = const Text('');
 
                             state.response.fold((l) {
-                              widget = Text(l);
+                              widget = ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  textStyle: TextStyle(
+                                      fontFamily: 'SB', fontSize: 20.sp),
+                                  minimumSize: const Size(200, 50),
+                                  backgroundColor: CustomColors.blue,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6.r),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  BlocProvider.of<AuthBloc>(context).add(
+                                    AuthRegisterEvent(
+                                      _usernameTextController.text,
+                                      _passwordTextController.text,
+                                      _passwordConfirmTextController.text,
+                                    ),
+                                  );
+                                },
+                                child: const Text('ساخت حساب'),
+                              );
                             }, (r) {
                               widget = Text(r);
                             });
