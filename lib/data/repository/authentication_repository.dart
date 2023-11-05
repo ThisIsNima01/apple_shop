@@ -3,7 +3,6 @@ import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/utils/api_exception.dart';
 import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:dartz/dartz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAuthRepository {
   Future<Either<String, String>> register(
@@ -18,7 +17,7 @@ class AuthenticationRepository extends IAuthRepository {
   Future<Either<String, String>> register(
       String username, String password, String passwordConfirm) async {
     try {
-      await _datasource.register('nima2321', '12345678', '12345678');
+      await _datasource.register(username, password, passwordConfirm);
       return right('ثبت نام با موفقیت انجام شد');
     } on ApiException catch (e) {
       return left(e.message ?? 'خطای نامشخص');
@@ -31,7 +30,6 @@ class AuthenticationRepository extends IAuthRepository {
       String accessToken = await _datasource.login(username, password);
 
       if (accessToken.isNotEmpty) {
-        AuthManager.saveToken(accessToken);
         return right('شما وارد شدید');
       } else {
         return left('خطایی در ورود پیش آمده');

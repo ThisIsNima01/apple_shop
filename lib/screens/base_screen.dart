@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/bloc/home/home_event.dart';
+import 'package:apple_shop/screens/login_screen.dart';
 import 'package:apple_shop/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,9 @@ class _BaseScreenState extends State<BaseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-          index: selectedBottomNavigationIndex, children: getLayout()),
+        index: selectedBottomNavigationIndex,
+        children: getLayout(),
+      ),
       bottomNavigationBar: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),

@@ -15,6 +15,9 @@ import 'package:apple_shop/data/repository/category_repository.dart';
 import 'package:apple_shop/data/repository/comment_repository.dart';
 import 'package:apple_shop/data/repository/product_detail_repository.dart';
 import 'package:apple_shop/data/repository/product_repository.dart';
+import 'package:apple_shop/utils/dio_provider.dart';
+import 'package:apple_shop/utils/payment_handler.dart';
+import 'package:apple_shop/utils/url_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,14 +25,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 final locator = GetIt.instance;
 
 Future<void> getItInit() async {
-  // Components
-  locator.registerSingleton<Dio>(
-      Dio(BaseOptions(baseUrl: 'http://startflutter.ir/api/')));
+  initComponents();
+
+  initDataSources();
+
+  initRepositories();
+
+  // Blocs
+  locator
+      .registerSingleton<BasketBloc>(BasketBloc(locator.get(), locator.get()));
+}
+
+Future<void> initComponents() async {
+
+  locator.registerSingleton<UrlHandler>(UrlLauncher());
+
+  locator.registerSingleton<PaymentHandler>(ZarinpalPayment(locator.get()));
 
   locator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
 
-  // DataSources
+  locator.registerSingleton<Dio>(DioProvider.createDio());
+
+}
+
+void initDataSources() {
   locator
       .registerFactory<IAuthenticationDataSource>(() => AuthenticationRemote());
   locator
@@ -42,8 +62,9 @@ Future<void> getItInit() async {
       () => CategoryProductRemoteDataSource());
   locator.registerFactory<IBasketDataSource>(() => BasketLocalDataSource());
   locator.registerFactory<ICommentDataSource>(() => CommentRemoteDataSource());
+}
 
-  // Repositories
+void initRepositories() {
   locator.registerFactory<IAuthRepository>(() => AuthenticationRepository());
   locator.registerFactory<ICategoryRepository>(() => CategoryRepository());
   locator.registerFactory<IBannerRepository>(() => BannerRepository());
@@ -54,7 +75,4 @@ Future<void> getItInit() async {
       () => CategoryProductRepository());
   locator.registerFactory<IBasketRepository>(() => BasketRepository());
   locator.registerFactory<ICommentRepository>(() => CommentRepository());
-
-  // Blocs
-  locator.registerSingleton<BasketBloc>(BasketBloc());
 }

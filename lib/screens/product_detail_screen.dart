@@ -12,7 +12,6 @@ import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:apple_shop/data/model/property.dart';
-import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:apple_shop/widgets/loading.dart';

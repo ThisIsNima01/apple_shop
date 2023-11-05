@@ -1,7 +1,14 @@
 abstract class AuthEvent {}
 
-class AuthLoginRequest extends AuthEvent {
+class AuthLoginEvent extends AuthEvent {
   String username;
   String password;
-  AuthLoginRequest(this.username, this.password);
+  AuthLoginEvent(this.username, this.password);
+}
+
+class AuthRegisterEvent extends AuthEvent {
+  String username;
+  String password;
+  String passwordConfirm;
+  AuthRegisterEvent(this.username, this.password, this.passwordConfirm);
 }

@@ -7,10 +7,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthRepository _repository = locator.get();
   AuthBloc() : super(AuthInitState()) {
-    on<AuthLoginRequest>(
+    on<AuthLoginEvent>(
       (event, emit) async {
         emit(AuthLoadingState());
         var response = await _repository.login(event.username, event.password);
+        emit(AuthResponseState(response));
+      },
+    );
+
+     on<AuthRegisterEvent>(
+      (event, emit) async {
+        emit(AuthLoadingState());
+        var response = await _repository.register(event.username, event.password,event.passwordConfirm);
         emit(AuthResponseState(response));
       },
     );

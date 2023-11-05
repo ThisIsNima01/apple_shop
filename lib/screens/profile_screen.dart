@@ -1,4 +1,6 @@
 import 'package:apple_shop/config/theme/app_colors.dart';
+import 'package:apple_shop/screens/login_screen.dart';
+import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:apple_shop/widgets/profile_item_chip.dart';
 import 'package:apple_shop/widgets/project_appbar.dart';
 import 'package:flutter/material.dart';
@@ -24,21 +26,34 @@ class ProfileScreen extends StatelessWidget {
                 bottom: 32.h,
                 top: 20.h,
               ),
-              child: ProjectAppBar(appbarTitle: 'حساب کاربری'),
+              child: const ProjectAppBar(appbarTitle: 'حساب کاربری'),
             ),
+            ElevatedButton(
+                onPressed: () {
+                  AuthManager.logout();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  );
+                },
+                child: const Text('خروج')),
             Text(
               'نیما نادری',
-              style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onBackground),
+              style: theme.textTheme.bodyLarge!
+                  .copyWith(color: theme.colorScheme.onBackground),
             ),
             Text(
               '09102937012',
-              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
+              style: theme.textTheme.labelSmall!
+                  .copyWith(color: AppColors.grey, fontFamily: 'SM'),
             ),
             SizedBox(
               height: 30.h,
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 44.w),
+              padding: EdgeInsets.symmetric(horizontal: 44.w),
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Wrap(
@@ -47,7 +62,9 @@ class ProfileScreen extends StatelessWidget {
                   children: List.generate(
                       11,
                       (index) => ProfileItemChip(
-                            title: index == 10 ? 'گیتهاب من' : 'گزینه ${index+1}',
+                            title: index == 10
+                                ? 'گیتهاب من'
+                                : 'گزینه ${index + 1}',
                             index: index,
                           )),
                 ),
@@ -56,15 +73,18 @@ class ProfileScreen extends StatelessWidget {
             const Spacer(),
             Text(
               'اپل شاپ',
-              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
+              style: theme.textTheme.labelSmall!
+                  .copyWith(color: AppColors.grey, fontFamily: 'SM'),
             ),
             Text(
               'v-2.0.00',
-              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
+              style: theme.textTheme.labelSmall!
+                  .copyWith(color: AppColors.grey, fontFamily: 'SM'),
             ),
             Text(
               'Instagram.com/nima_n_i',
-              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
+              style: theme.textTheme.labelSmall!
+                  .copyWith(color: AppColors.grey, fontFamily: 'SM'),
             ),
             SizedBox(
               height: 32.h,
